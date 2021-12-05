@@ -3,6 +3,8 @@ package com.dgioto.criminalintent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
+//стр 221
+
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
