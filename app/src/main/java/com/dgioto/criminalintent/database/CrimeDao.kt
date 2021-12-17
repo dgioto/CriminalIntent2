@@ -1,5 +1,6 @@
 package com.dgioto.criminalintent.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.dgioto.criminalintent.Crime
@@ -9,8 +10,10 @@ import java.util.*
 interface CrimeDao {
 
     @Query("SELECT * FROM crime")
-    fun getCrimes(): List<Crime>
+    //оборачиваем  список в LiveData
+    fun getCrimes(): LiveData<List<Crime>>
 
     @Query("SELECT * FROM crime WHERE id=(:id)")
-    fun getCrime(id: UUID): Crime?
+    //оборачиваем  список в LiveData
+    fun getCrime(id: UUID): LiveData<Crime?>
 }

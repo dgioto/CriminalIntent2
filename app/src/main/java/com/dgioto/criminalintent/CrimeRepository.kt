@@ -1,6 +1,7 @@
 package com.dgioto.criminalintent
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.dgioto.criminalintent.database.CrimeDataBase
 import java.lang.IllegalStateException
@@ -17,10 +18,10 @@ class CrimeRepository private constructor(context: Context){
     ).build()
 
     private val crimeDao = dataBase.crimeDao()
-
-    fun getCrimes(): List<Crime> = crimeDao.getCrimes()
-
-    fun getCrime(id: UUID): Crime? = crimeDao.getCrime(id)
+    //оборачиваем  список в LiveData
+    fun getCrimes(): LiveData<List<Crime>> = crimeDao.getCrimes()
+    //оборачиваем  список в LiveData
+    fun getCrime(id: UUID): LiveData<Crime?> = crimeDao.getCrime(id)
 
     companion object{
         private var INSTANCE: CrimeRepository? = null
