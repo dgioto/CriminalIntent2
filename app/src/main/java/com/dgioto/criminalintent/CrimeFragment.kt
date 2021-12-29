@@ -82,6 +82,7 @@ class CrimeFragment : Fragment() {
         dateButton.text = crime.date.toString()
         solvedCheckBox.apply{
             isChecked = crime.isSolved
+            //Пропуск анимации флажком
             jumpDrawablesToCurrentState()
         }
     }
@@ -117,5 +118,10 @@ class CrimeFragment : Fragment() {
                 crime.isSolved = isChecked
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        crimeDetailViewModel.saveCrime(crime)
     }
 }
