@@ -6,7 +6,6 @@ import androidx.room.Room
 import com.dgioto.criminalintent.database.CrimeDataBase
 import java.lang.IllegalStateException
 import java.util.*
-import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 private const val DATABASE_NAME = "crime-database"
