@@ -34,6 +34,8 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
         super.onCreate(savedInstanceState)
         crime = Crime()
         val crimeId: UUID = arguments?.getSerializable(ARG_CRIME_ID) as UUID
+        //загрузка приступления из базы данных
+        crimeDetailViewModel.loadCrime(crimeId)
     }
 
     companion object {
@@ -88,17 +90,23 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
         super.onStart()
 
         val titleWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) = Unit
 
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
                 crime.title = s.toString()
             }
 
-            override fun afterTextChanged(s: Editable?) {
-
-            }
+            override fun afterTextChanged(s: Editable?) = Unit
         }
         titleField.addTextChangedListener(titleWatcher)
 
