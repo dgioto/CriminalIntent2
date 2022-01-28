@@ -3,6 +3,7 @@ package com.dgioto.criminalintent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.format.DateFormat
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ private const val TAG = "CrimeFragment"
 private const val ARG_CRIME_ID = "crime_id"
 private const val DIALOG_DATE = "DialogDate"
 private const val REQUEST_DATE = 0
+private const val DATE_FORMAT = "EEE, MMM, dd"
 
 class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
 
@@ -84,6 +86,28 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
             //Пропуск анимации флажком
             jumpDrawablesToCurrentState()
         }
+    }
+
+    private fun getCrimeReport(): String{
+        val solvedString = if (crime.isSolved){
+            getString(R.string.crime_report_solved)
+        } else {
+            getString(R.string.crime_report_unsolved)
+        }
+
+        val dateString = DateFormat.format(DATE_FORMAT,crime.date).toString()
+        var suspect = if (crime.suspect.isBlank()){
+            getString(R.string.crime_report_no_suspect)
+        } else {
+            getString(R.string.crime_report_suspect, crime.suspect)
+        }
+        return getString(
+            R.string.crime_report,
+            crime.title,
+            dateString,
+            solvedString,
+            suspect
+        )
     }
 
     override fun onStart() {
