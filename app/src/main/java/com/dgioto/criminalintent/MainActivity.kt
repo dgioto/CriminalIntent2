@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import java.util.*
 
-//стр 346
+//стр 348
 
 private const val TAG = "MainActivity"
 

@@ -2,6 +2,7 @@ package com.dgioto.criminalintent
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
@@ -19,6 +20,7 @@ private const val TAG = "CrimeFragment"
 private const val ARG_CRIME_ID = "crime_id"
 private const val DIALOG_DATE = "DialogDate"
 private const val REQUEST_DATE = 0
+private const val REQUEST_CONTACT = 1
 private const val DATE_FORMAT = "EEE, MMM, dd"
 
 class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
@@ -28,18 +30,10 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
     private lateinit var dateButton: Button
     private lateinit var solvedCheckBox: CheckBox
     private lateinit var reportButton: Button
-
+    private lateinit var suspectButton: Button
     //Загрузка фрагмента CrimeFragment в CrimeDetailViewModel
     private val crimeDetailViewModel: CrimeDetailViewModel by lazy {
         ViewModelProvider(this).get(crimeDetailViewModel::class.java)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        crime = Crime()
-        val crimeId: UUID = arguments?.getSerializable(ARG_CRIME_ID) as UUID
-        //загрузка приступления из базы данных
-        crimeDetailViewModel.loadCrime(crimeId)
     }
 
     companion object {
@@ -53,6 +47,14 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        crime = Crime()
+        val crimeId: UUID = arguments?.getSerializable(ARG_CRIME_ID) as UUID
+        //загрузка приступления из базы данных
+        crimeDetailViewModel.loadCrime(crimeId)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,6 +64,7 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
         dateButton = view.findViewById(R.id.crime_date) as Button
         solvedCheckBox = view.findViewById(R.id.crime_solved) as CheckBox
         reportButton = view.findViewById(R.id.crime_report) as Button
+        suspectButton = view.findViewById(R.id.crime_suspect) as Button
 
         return view
     }
@@ -71,46 +74,13 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
 
         //наблюдаеь за значением crimeLiveData в CrimeDetailViewModel и обновляем
         // пользовательский интерфейс при публикации новых данных.
-        crimeDetailViewModel.crimeLiveData.observe(
-            viewLifecycleOwner,
-            { crime ->
-                crime?.let {
-                    this.crime = crime
-                    updateUI()
-                }
-            })
-    }
-
-    private fun updateUI() {
-        titleField.setText(crime.title)
-        dateButton.text = crime.date.toString()
-        solvedCheckBox.apply{
-            isChecked = crime.isSolved
-            //Пропуск анимации флажком
-            jumpDrawablesToCurrentState()
+        crimeDetailViewModel.crimeLiveData.observe(viewLifecycleOwner)
+        { crime ->
+            crime?.let {
+                this.crime = crime
+                updateUI()
+            }
         }
-    }
-
-    private fun getCrimeReport(): String{
-        val solvedString = if (crime.isSolved){
-            getString(R.string.crime_report_solved)
-        } else {
-            getString(R.string.crime_report_unsolved)
-        }
-
-        val dateString = DateFormat.format(DATE_FORMAT,crime.date).toString()
-        var suspect = if (crime.suspect.isBlank()){
-            getString(R.string.crime_report_no_suspect)
-        } else {
-            getString(R.string.crime_report_suspect, crime.suspect)
-        }
-        return getString(
-            R.string.crime_report,
-            crime.title,
-            dateString,
-            solvedString,
-            suspect
-        )
     }
 
     override fun onStart() {
@@ -150,6 +120,9 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
             }
         }
 
+        /*
+            В реализации слушателя создайте неявный интент и передайте его startActivity(Intent).
+         */
         reportButton.setOnClickListener {
             Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
@@ -158,6 +131,19 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
             }.also { intent ->
                 val chooserIntent = Intent.createChooser(intent, getString(R.string.send_report))
                 startActivity(chooserIntent)
+            }
+        }
+
+        /*
+            в функции onStart() назначьте кнопке слушателя. В реализации слушателя передайте неявный
+            интент функции startActivityForResult(...). Создайте неявный интент для запроса
+            контакта. Также выведите на кнопке имя подозреваемого.
+         */
+        suspectButton.apply {
+            val pickContactIntent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
+
+            setOnClickListener{
+                startActivityForResult(pickContactIntent, REQUEST_CONTACT)
             }
         }
     }
@@ -170,5 +156,44 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
     override fun onDateSelected(date: Date) {
         crime.date = date
         updateUI()
+    }
+
+    private fun getCrimeReport(): String{
+        val solvedString = if (crime.isSolved){
+            getString(R.string.crime_report_solved)
+        } else {
+            getString(R.string.crime_report_unsolved)
+        }
+
+        val dateString = DateFormat.format(DATE_FORMAT,crime.date).toString()
+        var suspect = if (crime.suspect.isBlank()){
+            getString(R.string.crime_report_no_suspect)
+        } else {
+            getString(R.string.crime_report_suspect, crime.suspect)
+        }
+        return getString(
+            R.string.crime_report,
+            crime.title,
+            dateString,
+            solvedString,
+            suspect
+        )
+    }
+
+    private fun updateUI() {
+        titleField.setText(crime.title)
+        dateButton.text = crime.date.toString()
+        solvedCheckBox.apply{
+            isChecked = crime.isSolved
+            //Пропуск анимации флажком
+            jumpDrawablesToCurrentState()
+        }
+        /*
+            Изменим функцию updateUI(), чтобы установить текст на кнопке CHOOSE SUSPECT,
+            если у преступления есть подозреваемый.
+         */
+        if (crime.suspect.isNotEmpty()){
+            suspectButton.text = crime.suspect
+        }
     }
 }
