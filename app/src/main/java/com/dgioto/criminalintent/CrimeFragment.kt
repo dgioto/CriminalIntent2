@@ -37,7 +37,7 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
     private lateinit var suspectButton: Button
     //Загрузка фрагмента CrimeFragment в CrimeDetailViewModel
     private val crimeDetailViewModel: CrimeDetailViewModel by lazy {
-        ViewModelProvider(this).get(crimeDetailViewModel::class.java)
+        ViewModelProvider(this).get(CrimeDetailViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
