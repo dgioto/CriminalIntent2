@@ -63,14 +63,13 @@ class CrimeListFragment : Fragment() {
             с жизненным циклом другого компонента
         */
         crimeListViewModel.crimeListLiveData.observe(
-            viewLifecycleOwner,
-            { crimes ->
-                crimes?.let {
-                    Log.i(TAG, "Got crimes ${crimes.size}")
-                    updateUI(crimes)
-                }
+            viewLifecycleOwner
+        ) { crimes ->
+            crimes?.let {
+                Log.i(TAG, "Got crimes ${crimes.size}")
+                updateUI(crimes)
             }
-        )
+        }
     }
 
     override fun onDetach() {
