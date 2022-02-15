@@ -36,7 +36,6 @@
                 android:resource="@xml/files"/>
         </provider>
 
-        
     </application>
 
 </manifest>
