@@ -1,4 +1,4 @@
-package com.dgioto.criminalintent
+package com.dgioto.criminalintent.fragment
 
 import android.app.Activity
 import android.content.Intent
@@ -16,6 +16,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.lifecycle.ViewModelProvider
+import com.dgioto.criminalintent.Crime
+import com.dgioto.criminalintent.CrimeDetailViewModel
+import com.dgioto.criminalintent.R
 import java.io.File
 import java.util.*
 
