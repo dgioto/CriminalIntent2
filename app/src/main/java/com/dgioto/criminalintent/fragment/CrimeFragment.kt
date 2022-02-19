@@ -18,9 +18,11 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
+
 import com.dgioto.criminalintent.Crime
-import com.dgioto.criminalintent.CrimeDetailViewModel
 import com.dgioto.criminalintent.R
+import com.dgioto.criminalintent.getScaledBitmap
+
 import java.io.File
 import java.util.*
 
@@ -44,6 +46,7 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
     private lateinit var photoView: ImageView
     private lateinit var photoFile : File
     private lateinit var photoUri: Uri
+
     //Загрузка фрагмента CrimeFragment в CrimeDetailViewModel
     private val crimeDetailViewModel: CrimeDetailViewModel by lazy {
         ViewModelProvider(this).get(CrimeDetailViewModel::class.java)
@@ -196,6 +199,12 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
         crimeDetailViewModel.saveCrime(crime)
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        //Отзыв разрешений URI
+        requireActivity().revokeUriPermission(photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+    }
+
     override fun onDateSelected(date: Date) {
         crime.date = date
         updateUI()
@@ -215,6 +224,17 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
          */
         if (crime.suspect.isNotEmpty()){
             suspectButton.text = crime.suspect
+        }
+        updatePhotoView()
+    }
+
+    //Обновление photoView
+    private fun updatePhotoView(){
+        if (photoFile.exists()) {
+            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
+            photoView.setImageBitmap(bitmap)
+        } else {
+            photoView.setImageBitmap(null)
         }
     }
 
@@ -250,6 +270,11 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
                     crimeDetailViewModel.saveCrime(crime)
                     suspectButton.text = suspect
                 }
+            }
+            requestCode == REQUEST_PHOTO -> {
+                //Отзыв разрешений URI
+                requireActivity().revokeUriPermission(photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                updatePhotoView()
             }
         }
     }

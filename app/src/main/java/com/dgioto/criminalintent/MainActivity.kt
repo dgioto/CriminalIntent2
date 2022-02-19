@@ -6,7 +6,7 @@ import com.dgioto.criminalintent.fragment.CrimeFragment
 import com.dgioto.criminalintent.fragment.CrimeListFragment
 import java.util.*
 
-//стр 368
+//стр 376
 
 private const val TAG = "MainActivity"
 

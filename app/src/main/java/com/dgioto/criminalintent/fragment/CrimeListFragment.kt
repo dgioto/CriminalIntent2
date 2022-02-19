@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dgioto.criminalintent.Crime
-import com.dgioto.criminalintent.CrimeListViewModel
 import com.dgioto.criminalintent.R
 import java.util.*
 
