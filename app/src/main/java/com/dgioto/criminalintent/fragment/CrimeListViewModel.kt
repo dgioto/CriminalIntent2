@@ -1,6 +1,8 @@
-package com.dgioto.criminalintent
+package com.dgioto.criminalintent.fragment
 
 import androidx.lifecycle.ViewModel
+import com.dgioto.criminalintent.Crime
+import com.dgioto.criminalintent.CrimeRepository
 
 class CrimeListViewModel: ViewModel() {
 

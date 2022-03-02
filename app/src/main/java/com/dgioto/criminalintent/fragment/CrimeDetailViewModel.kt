@@ -1,9 +1,12 @@
-package com.dgioto.criminalintent
+package com.dgioto.criminalintent.fragment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.dgioto.criminalintent.Crime
+import com.dgioto.criminalintent.CrimeRepository
+import java.io.File
 import java.util.*
 
 /*
@@ -27,5 +30,10 @@ class CrimeDetailViewModel() : ViewModel() {
 
     fun saveCrime(crime: Crime){
         crimeRepository.updateCrime((crime))
+    }
+
+    //Выдача файла через CrimeDetailViewModel
+    fun getPhotoFile(crime: Crime): File {
+        return crimeRepository.getPhotoFile(crime)
     }
 }

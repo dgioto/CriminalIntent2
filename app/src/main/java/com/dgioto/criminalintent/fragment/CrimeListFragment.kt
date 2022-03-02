@@ -1,4 +1,4 @@
-package com.dgioto.criminalintent
+package com.dgioto.criminalintent.fragment
 
 import android.content.Context
 import android.os.Bundle
@@ -7,10 +7,11 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.dgioto.criminalintent.Crime
+import com.dgioto.criminalintent.R
 import java.util.*
 
 private const val TAG = "CrimeListFragment"

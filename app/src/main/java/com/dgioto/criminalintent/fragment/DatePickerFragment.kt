@@ -1,4 +1,4 @@
-package com.dgioto.criminalintent
+package com.dgioto.criminalintent.fragment
 
 import android.app.DatePickerDialog
 import android.app.Dialog

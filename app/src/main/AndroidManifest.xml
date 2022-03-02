@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dgioto.criminalintent">
 
+    <!-- Объявление функциональности -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false"/>
+
     <application
         android:name=".CriminalIntentApplication"
         android:allowBackup="true"
@@ -10,6 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CriminalIntent">
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/files" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -19,6 +28,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Добавление объявления FileProvider -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.dgioto.criminalintent.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <!-- Связывание с описанием путей -->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/files"/>
+        </provider>
+
     </application>
 
 </manifest>

@@ -2,9 +2,11 @@ package com.dgioto.criminalintent
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.dgioto.criminalintent.fragment.CrimeFragment
+import com.dgioto.criminalintent.fragment.CrimeListFragment
 import java.util.*
 
-//стр 354
+//стр 376
 
 private const val TAG = "MainActivity"
 
